@@ -1,5 +1,6 @@
 package com.vbutrim.bot;
 
+import com.vbutrim.weather.WeatherForecastManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,12 +16,16 @@ public class WeatherRecommenderBot extends TelegramLongPollingCommandBot {
 
     private final String botToken;
 
+    private final WeatherForecastManager weatherForecastManager;
+
     public WeatherRecommenderBot(
             String botUsername,
-            String botToken)
+            String botToken,
+            WeatherForecastManager weatherForecastManager)
     {
         super(botUsername);
         this.botToken = botToken;
+        this.weatherForecastManager = weatherForecastManager;
 
         logger.info("Bot is ready to use");
     }
@@ -33,6 +38,10 @@ public class WeatherRecommenderBot extends TelegramLongPollingCommandBot {
     @Override
     public void processNonCommandUpdate(Update update) {
         sendMessageToChat(update.getMessage().getChat(), "Unknown command");
+
+        sendMessageToChat(
+                update.getMessage().getChat(),
+                weatherForecastManager.getWeatherForecastByCityId(Long.parseLong(update.getMessage().getText())).toString());
     }
 
     private void sendMessageToChat(Chat chat, String text) {

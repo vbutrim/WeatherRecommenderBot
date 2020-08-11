@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class WeatherConfiguration {
 
     @Bean
-    public WeatherForecastManagerImpl weatherForecastManager(
+    public WeatherForecastManager weatherForecastManager(
             @Value("${open.weather.api.url}") String apiUrl,
             @Value("${open.weather.api.key}") String apiKey)
     {

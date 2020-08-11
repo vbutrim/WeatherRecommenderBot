@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class WeatherResponse {
 
     private double temp;  // Kelvin
@@ -23,5 +24,14 @@ public class WeatherResponse {
         } catch (ClassCastException e) {
             this.windSpeed = (int) wind.get("speed");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "WeatherResponse{" +
+                "temp=" + temp +
+                ", pressure=" + pressure +
+                ", windSpeed=" + windSpeed +
+                '}';
     }
 }
