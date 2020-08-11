@@ -41,7 +41,7 @@ public class WeatherRecommenderBot extends TelegramLongPollingCommandBot {
 
         sendMessageToChat(
                 update.getMessage().getChat(),
-                weatherForecastManager.getWeatherForecastByCityId(Long.parseLong(update.getMessage().getText())).toString());
+                weatherForecastManager.getWeatherForecastByCityId(Integer.parseInt(update.getMessage().getText())).toString());
     }
 
     private void sendMessageToChat(Chat chat, String text) {

@@ -40,7 +40,7 @@ public class WeatherForecastManagerImpl implements WeatherForecastManager, Close
     }
 
     @Override
-    public WeatherResponse getWeatherForecastByCityId(long cityId) {
+    public WeatherResponse getWeatherForecastByCityId(int cityId) {
 
         HttpGet httpGet = new HttpGet(String.format(apiUrl + GET_WEATHER_API_METHOD, cityId, apiKey));
         logger.info("Going to perform: " + httpGet);

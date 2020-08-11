@@ -14,4 +14,9 @@ public class WeatherConfiguration {
     {
         return new WeatherForecastManagerImpl(apiUrl, apiKey);
     }
+
+    @Bean
+    public AvailableCitiesManager availableCitiesManager() {
+        return new AvailableCitiesManager();
+    }
 }
