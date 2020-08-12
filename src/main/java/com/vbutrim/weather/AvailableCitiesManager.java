@@ -57,10 +57,12 @@ public class AvailableCitiesManager {
     public List<Map.Entry<String, Integer>> getFirstNCitiesStartsWith(String str) {
         Objects.requireNonNull(str, "input str can't be null");
 
+        final String startsWithPattern = str.trim().toLowerCase();
+
         return cityIdByName
                 .entrySet()
                 .stream()
-                .filter(x -> x.getKey().startsWith(str))
+                .filter(x -> x.getKey().toLowerCase().startsWith(startsWithPattern))
                 .limit(CITIES_COUNT_IN_SEARCH_RESPONSE)
                 .sorted(Map.Entry.comparingByKey())
                 .collect(Collectors.toList());

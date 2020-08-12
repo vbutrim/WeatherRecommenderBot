@@ -15,11 +15,11 @@ import java.io.IOException;
 
 public class WeatherForecastManagerImpl implements WeatherForecastManager, Closeable {
 
+    private static final int QUERY_TO_LOG_MAX_LENGTH = 69;
+
     private static final Logger logger = LogManager.getLogger(WeatherForecastManagerImpl.class);
 
     private static final String GET_WEATHER_API_METHOD = "/weather?id=%s&appid=%s&lang=ru";
-
-    private static final long MOSCOW_ID = 524894;
 
     private final String apiUrl;
     private final String apiKey;
@@ -43,7 +43,7 @@ public class WeatherForecastManagerImpl implements WeatherForecastManager, Close
     public WeatherResponse getWeatherForecastByCityId(int cityId) {
 
         HttpGet httpGet = new HttpGet(String.format(apiUrl + GET_WEATHER_API_METHOD, cityId, apiKey));
-        logger.info("Going to perform: " + httpGet);
+        logger.info("Going to perform " + httpGet.toString().substring(0, QUERY_TO_LOG_MAX_LENGTH) + "...");
 
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             int statusCode = response.getStatusLine().getStatusCode();
