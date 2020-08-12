@@ -73,10 +73,10 @@ class StartCommand extends DefaultBotCommand {
                         .setText(
                                 String.format("Hi, %s!\n" +
                                                 "Your current city is: <b>%s</b>\n\n" +
-                                                "To change it use next commands:\n" +
+                                                "To change it, use next commands:\n" +
                                                 " - <b>/find</b> {cityName}\n" +
                                                 " - <b>/change</b> {cityId}\n\n" +
-                                                "To check the current weather use:\n" +
+                                                "To check the current weather, use:\n" +
                                                 " - <b>/check</b>\n\n" +
                                                 "<i>Pay attention: currently only Russia Cities are available</i>",
                                         newConnectedUser.getNotEmptyName(),

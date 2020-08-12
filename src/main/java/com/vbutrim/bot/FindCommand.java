@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,16 +39,34 @@ public class FindCommand extends AuthorizedBotCommand {
                     .setText("No cities :(");
         }
 
+        int maxCityIdLength = cities
+                .stream()
+                .map(Map.Entry::getValue)
+                .max(Comparator.naturalOrder())
+                .map(Object::toString)
+                .get()
+                .length();
+
         return message
                 .enableHtml(true)
                 .setText(
                         cities
                                 .stream()
                                 .map((cityNameAndId) -> String.format(
-                                        "<b>%-9s</b> %s",
-                                        cityNameAndId.getValue(),
+                                        "<b>%s</b> %s",
+                                        addSpacesToBeatify(cityNameAndId.getValue(), maxCityIdLength),
                                         cityNameAndId.getKey()))
                                 .collect(Collectors.joining("\n"))
                 );
+    }
+
+    private static String addSpacesToBeatify(int value, int maxLength) {
+
+        String result = String.valueOf(value);
+        if (result.length() == maxLength) {
+            return result;
+        }
+
+        return " ".repeat(Math.max(0, maxLength - result.length() + 1)) + result;
     }
 }
