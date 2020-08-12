@@ -14,7 +14,7 @@ import java.util.Optional;
 public class CheckCommand extends AuthorizedBotCommand {
 
     private static final String WEATHER_RESPONSE_TEMPLATE = "<b>%s</b>\n\n" +
-            "Temperature is %s°C\n" +
+            "Temperature is %s °C\n" +
             "Pressure is %s hPa\n" +
             "Wind speed is %s m/s";
 
@@ -63,5 +63,4 @@ public class CheckCommand extends AuthorizedBotCommand {
                 )
         );
     }
-
 }
