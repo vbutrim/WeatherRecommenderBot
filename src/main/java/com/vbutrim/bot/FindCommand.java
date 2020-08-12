@@ -44,15 +44,15 @@ public class FindCommand extends AuthorizedBotCommand {
                 .map(Map.Entry::getValue)
                 .max(Comparator.naturalOrder())
                 .map(Object::toString)
-                .get()
-                .length();
+                .map(String::length)
+                .orElse(0);
 
         return message
                 .enableHtml(true)
                 .setText(
                         cities
                                 .stream()
-                                .map((cityNameAndId) -> String.format(
+                                .map(cityNameAndId -> String.format(
                                         "<b>%s</b> %s",
                                         addSpacesToBeatify(cityNameAndId.getValue(), maxCityIdLength),
                                         cityNameAndId.getKey()))

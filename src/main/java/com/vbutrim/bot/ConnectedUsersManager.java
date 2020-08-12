@@ -25,11 +25,6 @@ public class ConnectedUsersManager {
         return Optional.empty();
     }
 
-    private ConnectedUser findUserByChatIdOrThrow(long chatId) {
-        //noinspection OptionalGetWithoutIsPresent
-        return findUserByChatId(chatId).get();
-    }
-
     public ConnectedUser register(Chat chat, User user) {
         ConnectedUser newConnectedUser = new ConnectedUser(chat, user);
 
@@ -45,7 +40,7 @@ public class ConnectedUsersManager {
         connectedUserByChatId.remove(connectedUser.getChatId());
     }
 
-    public void changeCityId(Chat chat, User user, int cityId) {
+    public void changeCityId(Chat chat, int cityId) {
         connectedUserByChatId
                 .computeIfPresent(chat.getId(), (key, connectedUser) -> connectedUser.withCityId(cityId));
     }

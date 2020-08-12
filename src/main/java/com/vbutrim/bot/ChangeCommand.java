@@ -40,7 +40,7 @@ public class ChangeCommand extends AuthorizedBotCommand {
                         .setText("City with id " + cityId + " not found");
             }
 
-            connectedUsersManager.changeCityId(chat, user, cityId);
+            connectedUsersManager.changeCityId(chat, cityId);
             return message
                     .setText("Current city is " + cityNameO.get());
         } catch (NumberFormatException e) {

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +20,7 @@ public class WeatherForecastManagerImpl implements WeatherForecastManager, Close
 
     private static final Logger logger = LogManager.getLogger(WeatherForecastManagerImpl.class);
 
-    private static final String GET_WEATHER_API_METHOD = "/weather?id=%s&appid=%s&lang=ru";
+    private static final String GET_WEATHER_API_METHOD = "%s/weather?id=%s&appid=%s&lang=ru";
 
     private final String apiUrl;
     private final String apiKey;
@@ -42,8 +43,9 @@ public class WeatherForecastManagerImpl implements WeatherForecastManager, Close
     @Override
     public WeatherResponse getWeatherForecastByCityId(int cityId) {
 
-        HttpGet httpGet = new HttpGet(String.format(apiUrl + GET_WEATHER_API_METHOD, cityId, apiKey));
-        logger.info("Going to perform " + httpGet.toString().substring(0, QUERY_TO_LOG_MAX_LENGTH) + "...");
+        HttpGet httpGet = new HttpGet(String.format(GET_WEATHER_API_METHOD, apiUrl, cityId, apiKey));
+
+        logHttpRequest(httpGet);
 
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             int statusCode = response.getStatusLine().getStatusCode();
@@ -56,6 +58,15 @@ public class WeatherForecastManagerImpl implements WeatherForecastManager, Close
                     String.format("Error getting weather forecast for city with id %s", cityId),
                     e);
         }
+    }
+
+    private void logHttpRequest(HttpRequestBase httpRequestBase) {
+
+        String queryToLog = httpRequestBase.toString().replace(apiKey, "API_KEY");
+        logger.info("Going to perform {}...",
+                queryToLog.length() > QUERY_TO_LOG_MAX_LENGTH
+                        ? queryToLog.substring(0, QUERY_TO_LOG_MAX_LENGTH) + "..."
+                        : queryToLog);
     }
 
     @Override

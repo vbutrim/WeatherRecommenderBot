@@ -1,6 +1,5 @@
 package com.vbutrim.bot;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
@@ -22,12 +21,12 @@ abstract class DefaultBotCommand extends BotCommand {
      */
     DefaultBotCommand(String commandIdentifier, String description) {
         super(commandIdentifier, description);
-        logger.info("Registering /" + commandIdentifier + " command");
+        logger.info("Registering /{} command", commandIdentifier);
     }
 
     void sendResponse(AbsSender sender, SendMessage message, User user) {
         try {
-            logger.log(Level.INFO, String.format("Handling command '%s' from '%s'", getCommandIdentifier(), user.getId()));
+            logger.info("Handling command '{}' from '{}'", getCommandIdentifier(), user.getId());
             sender.execute(message);
         } catch (TelegramApiException e) {
             logger.error(String.format(

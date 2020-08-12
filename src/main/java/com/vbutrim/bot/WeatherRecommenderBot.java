@@ -17,8 +17,6 @@ public class WeatherRecommenderBot extends TelegramLongPollingCommandBot {
 
     private final String botToken;
 
-    private final WeatherForecastManager weatherForecastManager;
-
     public WeatherRecommenderBot(
             String botUsername,
             String botToken,
@@ -28,7 +26,6 @@ public class WeatherRecommenderBot extends TelegramLongPollingCommandBot {
     {
         super(botUsername);
         this.botToken = botToken;
-        this.weatherForecastManager = weatherForecastManager;
 
         register(new StartCommand(connectedUsersManager, availableCitiesManager));
         register(new FindCommand(connectedUsersManager, availableCitiesManager));
