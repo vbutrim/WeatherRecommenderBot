@@ -44,7 +44,7 @@ public class FindCommand extends AuthorizedBotCommand {
                         cities
                                 .stream()
                                 .map((cityNameAndId) -> String.format(
-                                        "<b>[%s]</b> %s",
+                                        "<b>%-9s</b> %s",
                                         cityNameAndId.getValue(),
                                         cityNameAndId.getKey()))
                                 .collect(Collectors.joining("\n"))
