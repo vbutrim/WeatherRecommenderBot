@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +14,12 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-class AvailableCitiesManager {
+public class AvailableCitiesManager {
 
     private static final Logger logger = LogManager.getLogger(AvailableCitiesManager.class);
 
+    public static final int DEFAULT_CITY_ID = 524894;
+    private static final String DEFAULT_CITY_NAME = "Moscow";
     private static final int CITIES_COUNT_IN_SEARCH_RESPONSE = 5;
 
     private final Map<Integer, String> cityNameById;
@@ -51,7 +54,7 @@ class AvailableCitiesManager {
         }
     }
 
-    List<Map.Entry<String, Integer>> getFirstNCitiesStartsWith(String str) {
+    public List<Map.Entry<String, Integer>> getFirstNCitiesStartsWith(String str) {
         Objects.requireNonNull(str, "input str can't be null");
 
         return cityIdByName
@@ -59,10 +62,16 @@ class AvailableCitiesManager {
                 .stream()
                 .filter(x -> x.getKey().startsWith(str))
                 .limit(CITIES_COUNT_IN_SEARCH_RESPONSE)
+                .sorted(Map.Entry.comparingByKey())
                 .collect(Collectors.toList());
     }
 
-    Optional<String> getCityById(int cityId) {
+    public Optional<String> getCityById(int cityId) {
+
+        if (cityId == DEFAULT_CITY_ID) {
+            return Optional.of(DEFAULT_CITY_NAME);
+        }
+
         if (!cityNameById.containsKey(cityId)) {
             return Optional.empty();
         }

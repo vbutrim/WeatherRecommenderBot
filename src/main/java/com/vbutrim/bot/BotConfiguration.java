@@ -1,5 +1,6 @@
 package com.vbutrim.bot;
 
+import com.vbutrim.weather.AvailableCitiesManager;
 import com.vbutrim.weather.WeatherConfiguration;
 import com.vbutrim.weather.WeatherForecastManager;
 import org.apache.logging.log4j.Level;
@@ -22,10 +23,17 @@ public class BotConfiguration {
     private static final Logger logger = LogManager.getLogger(BotConfiguration.class);
 
     @Bean
+    public ConnectedUsersManager connectedUsersManager() {
+        return new ConnectedUsersManager();
+    }
+
+    @Bean
     public WeatherRecommenderBot weatherRecommenderBot(
             @Value("${telegram.bot.name}") String telegramBotName,
             @Value("${telegram.bot.token}") String telegramBotToken,
-            WeatherForecastManager weatherForecastManager)
+            WeatherForecastManager weatherForecastManager,
+            ConnectedUsersManager connectedUsersManager,
+            AvailableCitiesManager availableCitiesManager)
     {
         WeatherRecommenderBot weatherRecommenderBot = null;
 
@@ -39,7 +47,9 @@ public class BotConfiguration {
             weatherRecommenderBot = new WeatherRecommenderBot(
                     telegramBotName,
                     telegramBotToken,
-                    weatherForecastManager
+                    weatherForecastManager,
+                    connectedUsersManager,
+                    availableCitiesManager
             );
 
             botsApi.registerBot(weatherRecommenderBot);

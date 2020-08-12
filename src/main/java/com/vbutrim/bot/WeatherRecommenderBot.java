@@ -1,5 +1,6 @@
 package com.vbutrim.bot;
 
+import com.vbutrim.weather.AvailableCitiesManager;
 import com.vbutrim.weather.WeatherForecastManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -21,11 +22,34 @@ public class WeatherRecommenderBot extends TelegramLongPollingCommandBot {
     public WeatherRecommenderBot(
             String botUsername,
             String botToken,
-            WeatherForecastManager weatherForecastManager)
+            WeatherForecastManager weatherForecastManager,
+            ConnectedUsersManager connectedUsersManager,
+            AvailableCitiesManager availableCitiesManager)
     {
         super(botUsername);
         this.botToken = botToken;
         this.weatherForecastManager = weatherForecastManager;
+
+        register(new StartCommand(connectedUsersManager, availableCitiesManager));
+        register(new FindCommand(connectedUsersManager, availableCitiesManager));
+        register(new ChangeCommand(connectedUsersManager, availableCitiesManager));
+        register(new CheckCommand(connectedUsersManager, availableCitiesManager, weatherForecastManager));
+        register(new StopCommand(connectedUsersManager));
+
+        registerDefaultAction((absSender, message) -> {
+
+            SendMessage sendMessage = new SendMessage();
+            sendMessage
+                    .setChatId(message.getChatId())
+                    .setText("Unknown command");
+            try {
+                absSender.execute(sendMessage);
+            } catch (TelegramApiException e) {
+                logger.log(Level.ERROR,
+                        String.format("Error while replying unknown command to user '%s': %s",
+                                message.getFrom(), e));
+            }
+        });
 
         logger.info("Bot is ready to use");
     }
@@ -38,10 +62,6 @@ public class WeatherRecommenderBot extends TelegramLongPollingCommandBot {
     @Override
     public void processNonCommandUpdate(Update update) {
         sendMessageToChat(update.getMessage().getChat(), "Unknown command");
-
-        sendMessageToChat(
-                update.getMessage().getChat(),
-                weatherForecastManager.getWeatherForecastByCityId(Integer.parseInt(update.getMessage().getText())).toString());
     }
 
     private void sendMessageToChat(Chat chat, String text) {

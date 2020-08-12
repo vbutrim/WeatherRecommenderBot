@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@PropertySource("classpath:${env}.properties")
+@PropertySource("classpath:default.properties")
 @EnableScheduling
 public class Application {
 
