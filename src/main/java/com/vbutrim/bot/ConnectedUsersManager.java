@@ -46,6 +46,7 @@ public class ConnectedUsersManager {
     }
 
     public void changeCityId(Chat chat, User user, int cityId) {
-
+        connectedUserByChatId
+                .computeIfPresent(chat.getId(), (key, connectedUser) -> connectedUser.withCityId(cityId));
     }
 }

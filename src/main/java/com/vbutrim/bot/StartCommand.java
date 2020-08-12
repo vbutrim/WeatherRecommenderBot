@@ -78,7 +78,7 @@ class StartCommand extends DefaultBotCommand {
                                                 " - <b>/change</b> {cityId}\n\n" +
                                                 "To check the current weather use:\n" +
                                                 " - <b>/check</b>\n\n" +
-                                                "<i>Pay attention:</i> currently only Russia Cities are available",
+                                                "<i>Pay attention: currently only Russia Cities are available</i>",
                                         newConnectedUser.getNotEmptyName(),
                                         cityName.get())),
                 user

@@ -22,6 +22,11 @@ public class ChangeCommand extends AuthorizedBotCommand {
         SendMessage message = new SendMessage()
                 .setChatId(chat.getId());
 
+        if (arguments.length == 0) {
+            return message
+                    .setText("Please, type in cityId");
+        }
+
         if (arguments.length != 1) {
             return message
                     .setText("Incorrect amount of arguments. Type cityId only");
