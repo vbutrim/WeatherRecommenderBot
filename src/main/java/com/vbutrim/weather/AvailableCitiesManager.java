@@ -3,8 +3,8 @@ package com.vbutrim.weather;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,26 +30,27 @@ public class AvailableCitiesManager {
         this.cityIdByName = new HashMap<>();
 
         logger.info("Initializing...");
-        try (Scanner sc = new Scanner(
-                new FileReader(this.getClass().getResource("available_city_ids_utf8").toString().substring(6))))
+        try (InputStream inputStream =
+                     AvailableCitiesManager.class.getResourceAsStream("available_city_ids_utf8"))
         {
-            while (sc.hasNextLine()) {
-                String[] cityIdAndName = sc.nextLine().split("\t");
-                int cityId = Integer.parseInt(cityIdAndName[0]);
-                String cityName = cityIdAndName[1];
+            try (Scanner sc = new Scanner(inputStream)) {
+                while (sc.hasNextLine()) {
+                    String[] cityIdAndName = sc.nextLine().split("\t");
+                    int cityId = Integer.parseInt(cityIdAndName[0]);
+                    String cityName = cityIdAndName[1];
 
-                if (cityIdByName.containsKey(cityName)) {
-                    continue;
+                    if (cityIdByName.containsKey(cityName)) {
+                        continue;
+                    }
+
+                    cityIdByName.put(cityName, cityId);
+                    cityNameById.put(cityId, cityName);
                 }
 
-                cityIdByName.put(cityName, cityId);
-                cityNameById.put(cityId, cityName);
+                logger.info("Successfully initialized");
             }
-
-            logger.info("Successfully initialized");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.exit(0);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
         }
     }
 
