@@ -5,14 +5,31 @@ import com.vbutrim.weather.AvailableCitiesManager;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.util.Objects;
+
+@Entity
+@Table(name = "telegram_connected_users")
 public class ConnectedUser {
 
     static final int DEFAULT_CITY_ID = AvailableCitiesManager.DEFAULT_CITY_ID;
 
-    private final long chatId;
-    private final String userName;
-    private final String fullName;
-    private final int cityId;
+    @Id
+    @Column(name = "chat_id", nullable = false)
+    private Long chatId;
+    @Column(name = "user_name")
+    private String userName;
+    @Column(name = "full_name")
+    private String fullName;
+    @Column(name = "city_id")
+    private int cityId;
+
+    // jpa only
+    protected ConnectedUser() {
+    }
 
     private ConnectedUser(long chatId, String userName, String fullName, int cityId) {
         this.chatId = chatId;
@@ -59,5 +76,31 @@ public class ConnectedUser {
         }
 
         return getFullName();
+    }
+
+    @Override
+    public String toString() {
+        return "ConnectedUser{" +
+                "chatId=" + chatId +
+                ", userName='" + userName + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", cityId=" + cityId +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ConnectedUser)) return false;
+        ConnectedUser that = (ConnectedUser) o;
+        return getCityId() == that.getCityId() &&
+                getChatId() == that.getChatId() &&
+                Objects.equals(getUserName(), that.getUserName()) &&
+                Objects.equals(getFullName(), that.getFullName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getChatId(), getUserName(), getFullName(), getCityId());
     }
 }

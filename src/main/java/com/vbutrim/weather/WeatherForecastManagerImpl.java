@@ -65,7 +65,7 @@ public class WeatherForecastManagerImpl implements WeatherForecastManager, Close
         String queryToLog = httpRequestBase.toString().replace(apiKey, "API_KEY");
         logger.info("Going to perform {}...",
                 queryToLog.length() > QUERY_TO_LOG_MAX_LENGTH
-                        ? queryToLog.substring(0, QUERY_TO_LOG_MAX_LENGTH) + "..."
+                        ? queryToLog.substring(0, QUERY_TO_LOG_MAX_LENGTH)
                         : queryToLog);
     }
 

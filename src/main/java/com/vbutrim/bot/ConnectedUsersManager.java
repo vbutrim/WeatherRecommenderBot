@@ -3,45 +3,39 @@ package com.vbutrim.bot;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
-/**
- * Actually this is only a simulation of {@link ConnectedUser} storage
- */
 public class ConnectedUsersManager {
 
-    private final Map<Long, ConnectedUser> connectedUserByChatId;
+    private final ConnectedUsersRepository connectedUsersRepository;
 
-    public ConnectedUsersManager() {
-        this.connectedUserByChatId = new HashMap<>();
+    public ConnectedUsersManager(ConnectedUsersRepository connectedUsersRepository) {
+        this.connectedUsersRepository = connectedUsersRepository;
     }
 
     public Optional<ConnectedUser> findUserByChatId(long chatId) {
-        if (connectedUserByChatId.containsKey(chatId)) {
-            return Optional.of(connectedUserByChatId.get(chatId));
-        }
-        return Optional.empty();
+        return connectedUsersRepository.findByChatId(chatId);
     }
 
     public ConnectedUser register(Chat chat, User user) {
         ConnectedUser newConnectedUser = new ConnectedUser(chat, user);
-
-        connectedUserByChatId.put(
-                chat.getId(),
-                newConnectedUser
-        );
-
-        return newConnectedUser;
+        return connectedUsersRepository.save(newConnectedUser);
     }
 
     public void unregisterAndRemoveAllData(ConnectedUser connectedUser) {
-        connectedUserByChatId.remove(connectedUser.getChatId());
+        connectedUsersRepository.deleteById(connectedUser.getChatId());
     }
 
+    /**
+     * @throws NoSuchElementException if user hasn't started chat with bot
+     */
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public void changeCityId(Chat chat, int cityId) {
-        connectedUserByChatId
-                .computeIfPresent(chat.getId(), (key, connectedUser) -> connectedUser.withCityId(cityId));
+        connectedUsersRepository.save(
+                findUserByChatId(chat.getId())
+                        .get()
+                        .withCityId(cityId)
+        );
     }
 }

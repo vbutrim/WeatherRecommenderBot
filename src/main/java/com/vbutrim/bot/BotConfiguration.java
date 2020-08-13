@@ -23,8 +23,8 @@ public class BotConfiguration {
     private static final Logger logger = LogManager.getLogger(BotConfiguration.class);
 
     @Bean
-    public ConnectedUsersManager connectedUsersManager() {
-        return new ConnectedUsersManager();
+    public ConnectedUsersManager connectedUsersManager(ConnectedUsersRepository connectedUsersRepository) {
+        return new ConnectedUsersManager(connectedUsersRepository);
     }
 
     @Bean
