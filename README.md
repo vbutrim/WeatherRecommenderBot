@@ -39,7 +39,7 @@
 ![Architecture](media/Arch.png)
 
 ## Демонстрация
-# todo
+[![Demonstration](media/DemonstrationPreview.png)](https://youtu.be/WAMNhHZDeNg)
 
 ## Взаимодействие пользователя с программой
 Сервис - чат-бот в Телеграме, который обрабатывает команды пользователя, что с ним взаимодействует.
